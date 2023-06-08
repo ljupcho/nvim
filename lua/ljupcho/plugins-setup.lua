@@ -101,6 +101,8 @@ return packer.startup(function(use)
   -- git integration
   use("lewis6991/gitsigns.nvim") -- show line modifications on left hand side
 
+  use({ "ray-x/guihua.lua", run = "cd lua/fzy && make" })
+
   use("ray-x/go.nvim")
 
   if packer_bootstrap then

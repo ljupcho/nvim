@@ -22,11 +22,13 @@ saga.setup({
   finder = {
     max_height = 0.5,
     min_width = 30,
+    default = "def+imp", -- which ones to be shown in the popup; def+ref+imp
     force_max_height = false,
     keys = {
       jump_to = "p",
       -- expand_or_jump = "o",
-      expand_or_jump = "<CR>",
+      -- expand_or_jump = "<CR>",
+      toggle_or_open = "<CR>",
       vsplit = "s",
       split = "i",
       tabe = "t",

@@ -45,7 +45,7 @@ local on_attach = function(client, bufnr)
   keymap.set("n", "<leader>o", "<cmd>LSoutlineToggle<CR>", opts) -- see outline on right hand side
 
   -- typescript specific keymaps (e.g. rename file and update imports)
-  if client.name == "tsserver" then
+  if client.name == "ts_ls" then
     keymap.set("n", "<leader>rf", ":TypescriptRenameFile<CR>") -- rename file and update imports
     keymap.set("n", "<leader>oi", ":TypescriptOrganizeImports<CR>") -- organize imports (not in youtube nvim video)
     keymap.set("n", "<leader>ru", ":TypescriptRemoveUnused<CR>") -- remove unused variables (not in youtube nvim video)
@@ -106,6 +106,9 @@ lspconfig["lua_ls"].setup({
       diagnostics = {
         globals = { "vim" },
       },
+      hint = {
+        enable = true, -- necessary
+      },
       workspace = {
         -- make language server aware of runtime files
         library = {
@@ -125,10 +128,20 @@ lspconfig["gopls"].setup({
   filetypes = { "go", "gomod" },
   settings = { -- custom settings for lua
     gopls = {
+      diagnosticsDelay = "off",
       analyses = {
         unusedparams = true,
       },
       staticcheck = true,
+    },
+    hints = {
+      rangeVariableTypes = true,
+      parameterNames = true,
+      constantValues = true,
+      assignVariableTypes = true,
+      compositeLiteralFields = true,
+      compositeLiteralTypes = true,
+      functionTypeParameters = true,
     },
     Lua = {
       -- make the language server recognize "vim" global
@@ -161,9 +174,9 @@ end
 
 go.setup({
   go = "go", -- go command, can be go[default] or go1.18beta1
-  goimport = "gopls", -- goimport command, can be gopls[default] or goimport
+  goimports = "gopls", -- goimport command, can be gopls[default] or goimport
   fillstruct = "gopls", -- can be nil (use fillstruct, slower) and gopls
-  gofmt = "gofumpt", --gofmt cmd,
+  gofmt = "golines", --gofmt cmd,
   max_line_len = 128, -- max line length in golines format, Target maximum line length for golines
   lsp_cfg = {
     capabilities = capabilities,
@@ -177,39 +190,39 @@ go.setup({
 })
 
 -- import rust plugin safely
-local rust_status, rust = pcall(require, "rust-tools")
-if not rust_status then
-  return
-end
-
-rust.setup({
-  tools = {
-    runnables = {
-      use_telescope = true,
-    },
-    inlay_hints = {
-      auto = true,
-      show_parameter_hints = false,
-      parameter_hints_prefix = "",
-      other_hints_prefix = "",
-    },
-  },
-
-  -- all the opts to send to nvim-lspconfig
-  -- these override the defaults set by rust-tools.nvim
-  -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
-  server = {
-    -- on_attach is a callback called when the language server attachs to the buffer
-    on_attach = on_attach,
-    settings = {
-      -- to enable rust-analyzer settings visit:
-      -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-      ["rust-analyzer"] = {
-        -- enable clippy on save
-        checkOnSave = {
-          command = "clippy",
-        },
-      },
-    },
-  },
-})
+-- local rust_status, rust = pcall(require, "rust-tools")
+-- if not rust_status then
+--   return
+-- end
+--
+-- rust.setup({
+--   tools = {
+--     runnables = {
+--       use_telescope = true,
+--     },
+--     inlay_hints = {
+--       auto = true,
+--       show_parameter_hints = false,
+--       parameter_hints_prefix = "",
+--       other_hints_prefix = "",
+--     },
+--   },
+--
+--   -- all the opts to send to nvim-lspconfig
+--   -- these override the defaults set by rust-tools.nvim
+--   -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+--   server = {
+--     -- on_attach is a callback called when the language server attachs to the buffer
+--     on_attach = on_attach,
+--     settings = {
+--       -- to enable rust-analyzer settings visit:
+--       -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+--       ["rust-analyzer"] = {
+--         -- enable clippy on save
+--         checkOnSave = {
+--           command = "clippy",
+--         },
+--       },
+--     },
+--   },
+-- })

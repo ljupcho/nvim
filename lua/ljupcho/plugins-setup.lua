@@ -106,7 +106,8 @@ return packer.startup(function(use)
   use("ray-x/go.nvim")
 
   -- Adds extra functionality over rust analyzer
-  use("simrat39/rust-tools.nvim")
+  -- use("simrat39/rust-tools.nvim")
+  -- use("rust-lang-nursery/rustfmt")
 
   if packer_bootstrap then
     require("packer").sync()
